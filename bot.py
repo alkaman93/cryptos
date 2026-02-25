@@ -51,11 +51,9 @@ class AdminAction(StatesGroup):
     balance = State()
     review = State()
 
-# username -> uid mapping (populated on every user message)
-username_map = {}  # "username_lowercase" -> uid
+username_map = {}
 
 def find_uid(query: str):
-    """Find UID by @username or numeric ID"""
     q = query.strip()
     if q.startswith("@"):
         return username_map.get(q[1:].lower())
@@ -193,19 +191,57 @@ async def show_menu(message: Message):
     else:
         await message.answer(WELCOME_TEXT, parse_mode="HTML", reply_markup=main_kb())
 
+def _reg(msg: Message):
+    if msg.from_user and msg.from_user.username:
+        username_map[msg.from_user.username.lower()] = msg.from_user.id
+
 # ===================== /START =====================
 @dp.message(Command("start"))
-async def cmd_start(message: Message):
+async def cmd_start(message: Message, state: FSMContext):
     uid = message.from_user.id
     get_user(uid)
     if message.from_user.username:
         username_map[message.from_user.username.lower()] = uid
     await safe_delete(message)
-    await show_menu(message)
 
-def _reg(msg: Message):
-    if msg.from_user and msg.from_user.username:
-        username_map[msg.from_user.username.lower()] = msg.from_user.id
+    args = message.text.split()
+    if len(args) > 1 and args[1].startswith("deal_"):
+        deal_id = args[1].replace("deal_", "", 1)
+        if deal_id in deals:
+            deal = deals[deal_id]
+            if deal["uid"] == uid:
+                await message.answer("⚠️ Это ваша собственная сделка.", reply_markup=main_kb())
+                return
+
+            buyer_name = f"@{message.from_user.username}" if message.from_user.username else f"ID: {uid}"
+            deal_text = (
+                f"📋 <b>Информация о сделке</b>\n\n"
+                f"🆔 ID: <code>{deal_id}</code>\n"
+                f"📝 Суть: {deal['description']}\n"
+                f"💵 Сумма: {deal['amount']}\n"
+                f"💱 Валюта: {deal['currency']}\n"
+                f"🔘 Статус: <b>Активна</b>\n\n"
+                f"📦 Передавайте актив исключительно через: <b>{MIDDLE_USERNAME}</b>"
+            )
+            await message.answer(deal_text, parse_mode="HTML", reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+                [InlineKeyboardButton(text="💬 Написать миддлу", url=f"https://t.me/{MIDDLE_USERNAME.lstrip('@')}")],
+                [InlineKeyboardButton(text="📱 В меню", callback_data="menu")]
+            ]))
+
+            # Уведомить продавца
+            try:
+                await bot.send_message(
+                    deal["uid"],
+                    f"👤 По вашей сделке <code>{deal_id}</code> перешёл: <b>{buyer_name}</b>",
+                    parse_mode="HTML"
+                )
+            except Exception:
+                pass
+        else:
+            await message.answer("❌ Сделка не найдена или уже завершена.", reply_markup=main_kb())
+        return
+
+    await show_menu(message)
 
 # ===================== MENU =====================
 @dp.callback_query(F.data == "menu")
