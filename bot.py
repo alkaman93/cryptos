@@ -12,8 +12,6 @@ ADMIN_IDS = [174415647, 7321459420]
 MIDDLE_USERNAME = "@CryptoDeal_Middle"
 SUPPORT_USERNAME = "@CryptoDeal_Escrow"
 TON_ADDRESS = "UQBu7JOWQIU72kp4r2TG45925P5Rg1qz5wzurEWmC5lWZbTL"
-CARD_NUMBER = "2200702126310668"
-CARD_BANK = "Озон Банк | +79011716762"
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(storage=MemoryStorage())
@@ -101,14 +99,12 @@ LANGS = {
         "own_deal": "⚠️ Это ваша собственная сделка.",
         "deal_not_found": "❌ Сделка не найдена или уже завершена.",
         "partner_notified": "👤 По вашей сделке <code>{deal_id}</code> перешёл: <b>{buyer}</b>",
-        "req_title": "🧾 <b>Реквизиты</b>\n\n💎 TON: <code>{ton}</code>\n💳 Карта: <code>{card}</code>\n⭐️ Stars: <code>{stars}</code>",
+        "req_title": "🧾 <b>Реквизиты</b>\n\n💎 TON: <code>{ton}</code>\n⭐️ Stars: <code>{stars}</code>",
         "no_req": "📎 Реквизит для <b>{cur}</b> не добавлен. Добавьте и создайте сделку заново.",
         "ton_saved": "✅ TON кошелёк сохранён!",
-        "card_saved": "✅ Карта сохранена!",
         "stars_saved": "✅ Username для Stars сохранён!",
         "redo_deal": "\n\nТеперь создайте сделку заново.",
         "enter_ton": "💎 Введите ваш <b>TON кошелёк</b>:",
-        "enter_card": "💳 Введите <b>номер карты</b>:",
         "enter_stars": "⭐️ Введите ваш <b>Telegram username</b> для Stars:",
         "topup_title": "💰 <b>Пополнение баланса</b>\n\nВыберите способ:",
         "withdraw_text": f"💸 <b>Вывод средств</b>\n\nОбратитесь в поддержку:\n👤 {MIDDLE_USERNAME}\n\n⚠️ Укажите сумму и реквизиты.",
@@ -129,10 +125,6 @@ LANGS = {
         "topup_ton": (
             f"💎 <b>Пополнение TON</b>\n\n<code>{TON_ADDRESS}</code>\n\n"
             f"После отправки напишите в поддержку: <b>{MIDDLE_USERNAME}</b>\n\n⏱ Зачисление: <b>5–15 минут</b>"
-        ),
-        "topup_card": (
-            f"💳 <b>Пополнение картой</b>\n\nРеквизиты:\n<code>{CARD_NUMBER}</code>\n{CARD_BANK}\n\n"
-            "• Сохраните чек.\n• Обратитесь в поддержку.\n\n⏱ Зачисление: <b>5–15 минут</b>"
         ),
         "topup_nft": (
             f"🎁 <b>Пополнение NFT</b>\n\nПередайте актив: <b>{MIDDLE_USERNAME}</b>\n\n"
@@ -217,14 +209,12 @@ LANGS = {
         "own_deal": "⚠️ This is your own deal.",
         "deal_not_found": "❌ Deal not found or already closed.",
         "partner_notified": "👤 User <b>{buyer}</b> joined your deal <code>{deal_id}</code>",
-        "req_title": "🧾 <b>Requisites</b>\n\n💎 TON: <code>{ton}</code>\n💳 Card: <code>{card}</code>\n⭐️ Stars: <code>{stars}</code>",
+        "req_title": "🧾 <b>Requisites</b>\n\n💎 TON: <code>{ton}</code>\n⭐️ Stars: <code>{stars}</code>",
         "no_req": "📎 Requisite for <b>{cur}</b> not added. Add it and create the deal again.",
         "ton_saved": "✅ TON wallet saved!",
-        "card_saved": "✅ Card saved!",
         "stars_saved": "✅ Stars username saved!",
         "redo_deal": "\n\nNow create the deal again.",
         "enter_ton": "💎 Enter your <b>TON wallet</b>:",
-        "enter_card": "💳 Enter your <b>card number</b>:",
         "enter_stars": "⭐️ Enter your <b>Telegram username</b> for Stars:",
         "topup_title": "💰 <b>Top Up Balance</b>\n\nChoose method:",
         "withdraw_text": f"💸 <b>Withdrawal</b>\n\nContact support:\n👤 {MIDDLE_USERNAME}\n\n⚠️ Specify amount and requisites.",
@@ -245,10 +235,6 @@ LANGS = {
         "topup_ton": (
             f"💎 <b>Top Up with TON</b>\n\n<code>{TON_ADDRESS}</code>\n\n"
             f"After sending, contact support: <b>{MIDDLE_USERNAME}</b>\n\n⏱ Processing: <b>5–15 minutes</b>"
-        ),
-        "topup_card": (
-            f"💳 <b>Top Up with Card</b>\n\nDetails:\n<code>{CARD_NUMBER}</code>\n{CARD_BANK}\n\n"
-            "• Save your receipt.\n• Contact support.\n\n⏱ Processing: <b>5–15 minutes</b>"
         ),
         "topup_nft": (
             f"🎁 <b>Top Up with NFT</b>\n\nTransfer asset to: <b>{MIDDLE_USERNAME}</b>\n\n"
@@ -321,14 +307,12 @@ LANGS = {
         "own_deal": "⚠️ Bu sizin öz sövdələşmənizdır.",
         "deal_not_found": "❌ Sövdələşmə tapılmadı.",
         "partner_notified": "👤 İstifadəçi <b>{buyer}</b> sövdələşməyə qoşuldu <code>{deal_id}</code>",
-        "req_title": "🧾 <b>Rekvizitlər</b>\n\n💎 TON: <code>{ton}</code>\n💳 Kart: <code>{card}</code>\n⭐️ Stars: <code>{stars}</code>",
+        "req_title": "🧾 <b>Rekvizitlər</b>\n\n💎 TON: <code>{ton}</code>\n⭐️ Stars: <code>{stars}</code>",
         "no_req": "📎 <b>{cur}</b> üçün rekvizit əlavə edilməyib.",
         "ton_saved": "✅ TON cüzdanı saxlanıldı!",
-        "card_saved": "✅ Kart saxlanıldı!",
         "stars_saved": "✅ Stars username saxlanıldı!",
         "redo_deal": "\n\nİndi sövdələşməni yenidən yaradın.",
         "enter_ton": "💎 <b>TON cüzdanınızı</b> daxil edin:",
-        "enter_card": "💳 <b>Kart nömrəsini</b> daxil edin:",
         "enter_stars": "⭐️ Stars üçün <b>Telegram username</b>-nizi daxil edin:",
         "topup_title": "💰 <b>Balansı Artır</b>\n\nÜsul seçin:",
         "withdraw_text": f"💸 <b>Çıxarış</b>\n\nDəstəklə əlaqə saxlayın:\n👤 {MIDDLE_USERNAME}",
@@ -337,7 +321,6 @@ LANGS = {
         "lang_set": "✅ Dil təyin edildi: Azərbaycanca 🇦🇿",
         "topup_stars": f"⭐️ Stars göndərin: <b>{MIDDLE_USERNAME}</b>\n\n⏱ <b>5–15 dəqiqə</b>",
         "topup_ton": f"💎 TON ünvanı:\n<code>{TON_ADDRESS}</code>\n\n{MIDDLE_USERNAME}\n\n⏱ <b>5–15 dəqiqə</b>",
-        "topup_card": f"💳 Kart:\n<code>{CARD_NUMBER}</code>\n{CARD_BANK}\n\n⏱ <b>5–15 dəqiqə</b>",
         "topup_nft": f"🎁 NFT göndərin: <b>{MIDDLE_USERNAME}</b>\n\n⏱ <b>5–15 dəqiqə</b>",
         "invalid_username": "❌ Düzgün @username daxil edin:",
     },
@@ -406,14 +389,12 @@ LANGS = {
         "own_deal": "⚠️ Bu sizin kendi anlaşmanız.",
         "deal_not_found": "❌ Anlaşma bulunamadı.",
         "partner_notified": "👤 Kullanıcı <b>{buyer}</b> anlaşmaya katıldı <code>{deal_id}</code>",
-        "req_title": "🧾 <b>Ödeme Bilgileri</b>\n\n💎 TON: <code>{ton}</code>\n💳 Kart: <code>{card}</code>\n⭐️ Stars: <code>{stars}</code>",
+        "req_title": "🧾 <b>Ödeme Bilgileri</b>\n\n💎 TON: <code>{ton}</code>\n⭐️ Stars: <code>{stars}</code>",
         "no_req": "📎 <b>{cur}</b> için ödeme bilgisi eklenmedi.",
         "ton_saved": "✅ TON cüzdanı kaydedildi!",
-        "card_saved": "✅ Kart kaydedildi!",
         "stars_saved": "✅ Stars kullanıcı adı kaydedildi!",
         "redo_deal": "\n\nŞimdi anlaşmayı yeniden oluşturun.",
         "enter_ton": "💎 <b>TON cüzdanınızı</b> girin:",
-        "enter_card": "💳 <b>Kart numaranızı</b> girin:",
         "enter_stars": "⭐️ Stars için <b>Telegram kullanıcı adını</b> girin:",
         "topup_title": "💰 <b>Bakiye Yükle</b>\n\nYöntem seçin:",
         "withdraw_text": f"💸 <b>Para Çekme</b>\n\nDestekle iletişime geçin:\n👤 {MIDDLE_USERNAME}",
@@ -422,7 +403,6 @@ LANGS = {
         "lang_set": "✅ Dil ayarlandı: Türkçe 🇹🇷",
         "topup_stars": f"⭐️ Stars gönderin: <b>{MIDDLE_USERNAME}</b>\n\n⏱ <b>5–15 dakika</b>",
         "topup_ton": f"💎 TON adresi:\n<code>{TON_ADDRESS}</code>\n\n{MIDDLE_USERNAME}\n\n⏱ <b>5–15 dakika</b>",
-        "topup_card": f"💳 Kart:\n<code>{CARD_NUMBER}</code>\n{CARD_BANK}\n\n⏱ <b>5–15 dakika</b>",
         "topup_nft": f"🎁 NFT gönderin: <b>{MIDDLE_USERNAME}</b>\n\n⏱ <b>5–15 dakika</b>",
         "invalid_username": "❌ Geçerli bir @username girin:",
     },
@@ -491,14 +471,12 @@ LANGS = {
         "own_deal": "⚠️ Бұл сіздің өз мәмілеңіз.",
         "deal_not_found": "❌ Мәміле табылмады.",
         "partner_notified": "👤 Пайдаланушы <b>{buyer}</b> мәмілеге қосылды <code>{deal_id}</code>",
-        "req_title": "🧾 <b>Реквизиттер</b>\n\n💎 TON: <code>{ton}</code>\n💳 Карта: <code>{card}</code>\n⭐️ Stars: <code>{stars}</code>",
+        "req_title": "🧾 <b>Реквизиттер</b>\n\n💎 TON: <code>{ton}</code>\n⭐️ Stars: <code>{stars}</code>",
         "no_req": "📎 <b>{cur}</b> үшін реквизит қосылмаған.",
         "ton_saved": "✅ TON әмиян сақталды!",
-        "card_saved": "✅ Карта сақталды!",
         "stars_saved": "✅ Stars username сақталды!",
         "redo_deal": "\n\nЕнді мәмілені қайта жасаңыз.",
         "enter_ton": "💎 <b>TON әмияныңызды</b> енгізіңіз:",
-        "enter_card": "💳 <b>Карта нөмірін</b> енгізіңіз:",
         "enter_stars": "⭐️ Stars үшін <b>Telegram username</b>-іңізді енгізіңіз:",
         "topup_title": "💰 <b>Балансты Толтыру</b>\n\nТәсілді таңдаңыз:",
         "withdraw_text": f"💸 <b>Шығару</b>\n\nҚолдаумен байланысыңыз:\n👤 {MIDDLE_USERNAME}",
@@ -507,7 +485,6 @@ LANGS = {
         "lang_set": "✅ Тіл орнатылды: Қазақша 🇰🇿",
         "topup_stars": f"⭐️ Stars жіберіңіз: <b>{MIDDLE_USERNAME}</b>\n\n⏱ <b>5–15 минут</b>",
         "topup_ton": f"💎 TON мекенжайы:\n<code>{TON_ADDRESS}</code>\n\n{MIDDLE_USERNAME}\n\n⏱ <b>5–15 минут</b>",
-        "topup_card": f"💳 Карта:\n<code>{CARD_NUMBER}</code>\n{CARD_BANK}\n\n⏱ <b>5–15 минут</b>",
         "topup_nft": f"🎁 NFT жіберіңіз: <b>{MIDDLE_USERNAME}</b>\n\n⏱ <b>5–15 минут</b>",
         "invalid_username": "❌ Дұрыс @username енгізіңіз:",
     },
@@ -576,14 +553,12 @@ LANGS = {
         "own_deal": "⚠️ Це ваша власна угода.",
         "deal_not_found": "❌ Угоду не знайдено.",
         "partner_notified": "👤 Користувач <b>{buyer}</b> приєднався до угоди <code>{deal_id}</code>",
-        "req_title": "🧾 <b>Реквізити</b>\n\n💎 TON: <code>{ton}</code>\n💳 Картка: <code>{card}</code>\n⭐️ Stars: <code>{stars}</code>",
+        "req_title": "🧾 <b>Реквізити</b>\n\n💎 TON: <code>{ton}</code>\n⭐️ Stars: <code>{stars}</code>",
         "no_req": "📎 Реквізит для <b>{cur}</b> не додано.",
         "ton_saved": "✅ TON гаманець збережено!",
-        "card_saved": "✅ Картку збережено!",
         "stars_saved": "✅ Username для Stars збережено!",
         "redo_deal": "\n\nТепер створіть угоду знову.",
         "enter_ton": "💎 Введіть ваш <b>TON гаманець</b>:",
-        "enter_card": "💳 Введіть <b>номер картки</b>:",
         "enter_stars": "⭐️ Введіть ваш <b>Telegram username</b> для Stars:",
         "topup_title": "💰 <b>Поповнення балансу</b>\n\nОберіть спосіб:",
         "withdraw_text": f"💸 <b>Виведення коштів</b>\n\nЗверніться до підтримки:\n👤 {MIDDLE_USERNAME}",
@@ -592,7 +567,6 @@ LANGS = {
         "lang_set": "✅ Мова встановлена: Українська 🇺🇦",
         "topup_stars": f"⭐️ Надішліть Stars: <b>{MIDDLE_USERNAME}</b>\n\n⏱ <b>5–15 хвилин</b>",
         "topup_ton": f"💎 TON адреса:\n<code>{TON_ADDRESS}</code>\n\n{MIDDLE_USERNAME}\n\n⏱ <b>5–15 хвилин</b>",
-        "topup_card": f"💳 Картка:\n<code>{CARD_NUMBER}</code>\n{CARD_BANK}\n\n⏱ <b>5–15 хвилин</b>",
         "topup_nft": f"🎁 Передайте NFT: <b>{MIDDLE_USERNAME}</b>\n\n⏱ <b>5–15 хвилин</b>",
         "invalid_username": "❌ Введіть коректний @username:",
     },
@@ -600,7 +574,7 @@ LANGS = {
 
 def get_user(uid):
     if uid not in user_data:
-        user_data[uid] = {"ton_wallet": "", "card": "", "username_stars": "", "has_requisites": False,
+        user_data[uid] = {"ton_wallet": "", "username_stars": "", "has_requisites": False,
                           "balance": 0.0, "reputation": 0, "deals_count": 0, "reviews": [], "lang": "ru"}
     return user_data[uid]
 
@@ -636,7 +610,6 @@ class SetBanner(StatesGroup):
 
 class AddReq(StatesGroup):
     ton = State()
-    card = State()
     stars = State()
 
 class Deal(StatesGroup):
@@ -681,26 +654,25 @@ def agreement_kb(uid):
     ])
 
 def currency_kb(uid):
-    lang = get_lang(uid)
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="💎 TON", callback_data="deal_cur_ton"),
          InlineKeyboardButton(text="⭐️ Stars", callback_data="deal_cur_stars")],
-        [InlineKeyboardButton(text="💳 " + ("Карта (RUB)" if lang == "ru" else "Card (RUB)" if lang == "en" else "Kart (RUB)" if lang in ("tr","az") else "Картка (RUB)" if lang == "ua" else "Карта (RUB)"), callback_data="deal_cur_card"),
-         InlineKeyboardButton(text="🎁 NFT", callback_data="deal_cur_nft")],
+        [InlineKeyboardButton(text="🎁 NFT", callback_data="deal_cur_nft")],
         [InlineKeyboardButton(text=L(uid,"btn_cancel"), callback_data="menu")],
     ])
 
 def req_kb(uid):
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="💎 TON", callback_data="req_ton"),
-         InlineKeyboardButton(text="💳 " + ("Карта" if get_lang(uid) in ("ru","kz") else "Card" if get_lang(uid) == "en" else "Kart" if get_lang(uid) in ("tr","az") else "Картка"), callback_data="req_card")],
-        [InlineKeyboardButton(text="⭐️ Username Stars", callback_data="req_stars")],
+         InlineKeyboardButton(text="⭐️ Username Stars", callback_data="req_stars")],
         [InlineKeyboardButton(text=L(uid,"btn_menu"), callback_data="menu")],
     ])
 
 def add_req_kb(uid, req_type):
+    lang = get_lang(uid)
+    add_text = {"ru": "Добавить", "en": "Add", "az": "Əlavə et", "tr": "Ekle", "kz": "Қосу", "ua": "Додати"}.get(lang, "Add")
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="➕ " + ("Добавить" if get_lang(uid) == "ru" else "Add" if get_lang(uid) == "en" else "Əlavə et" if get_lang(uid) == "az" else "Ekle" if get_lang(uid) == "tr" else "Қосу" if get_lang(uid) == "kz" else "Додати"), callback_data=f"req_{req_type}_deal")],
+        [InlineKeyboardButton(text=f"➕ {add_text}", callback_data=f"req_{req_type}_deal")],
         [InlineKeyboardButton(text=L(uid,"btn_menu"), callback_data="menu")],
     ])
 
@@ -708,8 +680,7 @@ def topup_kb(uid):
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="⭐️ Stars", callback_data="topup_stars"),
          InlineKeyboardButton(text="💎 TON", callback_data="topup_ton")],
-        [InlineKeyboardButton(text="💳 " + ("Карта" if get_lang(uid) in ("ru","kz","ua") else "Card" if get_lang(uid) == "en" else "Kart"), callback_data="topup_card"),
-         InlineKeyboardButton(text="🎁 NFT", callback_data="topup_nft")],
+        [InlineKeyboardButton(text="🎁 NFT", callback_data="topup_nft")],
         [InlineKeyboardButton(text=L(uid,"btn_menu"), callback_data="menu")],
         [InlineKeyboardButton(text=L(uid,"btn_support"), url="https://t.me/CryptoDeal_Middle")],
     ])
@@ -889,10 +860,9 @@ async def deal_amt(message: Message, state: FSMContext):
 async def deal_cur(callback: CallbackQuery, state: FSMContext):
     uid = callback.from_user.id
     cur_map = {
-        "deal_cur_ton":   ("💎 TON",        "ton_wallet",     "ton"),
-        "deal_cur_stars": ("⭐️ Stars",      "username_stars", "stars"),
-        "deal_cur_card":  ("💳 Card (RUB)", "card",           "card"),
-        "deal_cur_nft":   ("🎁 NFT",        None,             None),
+        "deal_cur_ton":   ("💎 TON",   "ton_wallet",     "ton"),
+        "deal_cur_stars": ("⭐️ Stars", "username_stars", "stars"),
+        "deal_cur_nft":   ("🎁 NFT",   None,             None),
     }
     cur_label, req_field, req_type = cur_map[callback.data]
     user = get_user(uid)
@@ -948,10 +918,10 @@ async def deal_cur(callback: CallbackQuery, state: FSMContext):
 async def req_from_deal(callback: CallbackQuery, state: FSMContext):
     uid = callback.from_user.id
     req_type = callback.data.replace("req_", "").replace("_deal", "")
-    key_map = {"ton": "enter_ton", "card": "enter_card", "stars": "enter_stars"}
+    key_map = {"ton": "enter_ton", "stars": "enter_stars"}
     await safe_delete(callback.message)
     await callback.message.answer(L(uid, key_map[req_type]), parse_mode="HTML", reply_markup=cancel_kb(uid))
-    state_map = {"ton": AddReq.ton, "card": AddReq.card, "stars": AddReq.stars}
+    state_map = {"ton": AddReq.ton, "stars": AddReq.stars}
     await state.set_state(state_map[req_type])
     await state.update_data(from_deal=True)
     await callback.answer()
@@ -963,7 +933,6 @@ async def cb_req(callback: CallbackQuery):
     u = get_user(uid)
     text = L(uid, "req_title",
              ton=u.get("ton_wallet") or "—",
-             card=u.get("card") or "—",
              stars=u.get("username_stars") or "—")
     await safe_delete(callback.message)
     await callback.message.answer(text, parse_mode="HTML", reply_markup=req_kb(uid))
@@ -975,14 +944,6 @@ async def cb_req_ton(callback: CallbackQuery, state: FSMContext):
     await safe_delete(callback.message)
     await callback.message.answer(L(uid, "enter_ton"), parse_mode="HTML", reply_markup=cancel_kb(uid))
     await state.set_state(AddReq.ton)
-    await callback.answer()
-
-@dp.callback_query(F.data == "req_card")
-async def cb_req_card(callback: CallbackQuery, state: FSMContext):
-    uid = callback.from_user.id
-    await safe_delete(callback.message)
-    await callback.message.answer(L(uid, "enter_card"), parse_mode="HTML", reply_markup=cancel_kb(uid))
-    await state.set_state(AddReq.card)
     await callback.answer()
 
 @dp.callback_query(F.data == "req_stars")
@@ -1003,17 +964,6 @@ async def save_ton(message: Message, state: FSMContext):
     await state.clear()
     suffix = L(uid, "redo_deal") if data.get("from_deal") else ""
     await message.answer(L(uid, "ton_saved") + suffix, parse_mode="HTML", reply_markup=main_kb(uid))
-
-@dp.message(AddReq.card)
-async def save_card(message: Message, state: FSMContext):
-    uid = message.from_user.id
-    _reg(message)
-    get_user(uid).update({"card": message.text, "has_requisites": True})
-    data = await state.get_data()
-    await safe_delete(message)
-    await state.clear()
-    suffix = L(uid, "redo_deal") if data.get("from_deal") else ""
-    await message.answer(L(uid, "card_saved") + suffix, parse_mode="HTML", reply_markup=main_kb(uid))
 
 @dp.message(AddReq.stars)
 async def save_stars(message: Message, state: FSMContext):
@@ -1046,13 +996,6 @@ async def cb_topup_ton(callback: CallbackQuery):
     uid = callback.from_user.id
     await safe_delete(callback.message)
     await callback.message.answer(L(uid, "topup_ton"), parse_mode="HTML", reply_markup=back_kb(uid))
-    await callback.answer()
-
-@dp.callback_query(F.data == "topup_card")
-async def cb_topup_card(callback: CallbackQuery):
-    uid = callback.from_user.id
-    await safe_delete(callback.message)
-    await callback.message.answer(L(uid, "topup_card"), parse_mode="HTML", reply_markup=back_kb(uid))
     await callback.answer()
 
 @dp.callback_query(F.data == "topup_nft")
@@ -1248,4 +1191,4 @@ async def main():
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(main()) 
